@@ -1,3 +1,3 @@
 # Python_Django
 
-###Self learned django web project through youtube.
+### Self learned django web project through youtube.
