@@ -4,12 +4,15 @@ from .views import (PostListView,
 	PostDetailView,
 	PostCreateView,
 	PostUpdateView,
-	PostDeleteView)
+	PostDeleteView,
+    latest_post)
 
 
 #in blog folder
 urlpatterns = [
     path('', PostListView.as_view(), name='blog-home'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    #path('latest_post/<int:pk>', latest_post, name='latest_post'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     path('post/new/', PostCreateView.as_view(), name='post-create'),
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),

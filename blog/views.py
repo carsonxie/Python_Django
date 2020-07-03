@@ -18,13 +18,30 @@ from .models import Post
 def home(request):
 	#return HttpResponse('<h1>Blog Home</h1>')
 
+	
+	
 	context = {
-		'posts': Post.objects.all()
+		'posts': Post.objects.all(),
+		
 	}
 
+	
 
 	#render still return httpreq
 	return render(request,'blog/home.html', context)
+
+
+def latest_post(request):
+
+    latest_post = Post.objects.order_by('date_posted')[0]
+    
+    context = {
+
+        'latest_post': latest_post
+    }
+
+    return render(request, 'blog/latest_post.html', context)
+
 
 class PostListView(ListView):
 

@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from users import views as users_views
-
+from blog import views as blog_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #to use home page as blog-home, leave the root path to empty
     path('', include('blog.urls')),
+    path('latest_post/', blog_views.latest_post, name='latest_post'),
     path('register/', users_views.register, name='register'),
     path('profile/', users_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
@@ -37,8 +38,10 @@ urlpatterns = [
         auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'), 
         name='password_reset_done'),
     path('password-reset-confirm/done/<uidb64>/<token>', 
-        auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_comfirm.html'), 
+        auth_views.PasswordResetConfirmView.as_view(template_name='users/password_reset_confirm.html'), 
         name='password_reset_confirm'),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'), 
+        name='password_reset_complete'),
 
 ]
 
