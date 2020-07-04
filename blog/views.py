@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.http import HttpResponse
+from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
     DetailView,
@@ -33,7 +33,7 @@ def home(request):
 
 def latest_post(request):
 
-    latest_post = Post.objects.order_by('date_posted')[0]
+    latest_post = Post.objects.order_by('-date_posted')[0]
     
     context = {
 
@@ -49,11 +49,37 @@ class PostListView(ListView):
 
 	model = Post
 	template_name = 'blog/home.html'
+	context_object_name = 'posts' #if you want to acces in code block in html, here us the 
+	#post object you define 
+	#context variable name that will be used to contain 
+	#the list of data that this view is manipulating
+
+	ordering = ['-date_posted']
+
+	#You get 2 posts per page
+	paginate_by = 5
+
+
+#Only list the posts by same user
+class UserPostListView(ListView):
+
+	#tell view to query model data
+
+	model = Post
+	template_name = 'blog/user_post.html'
 	context_object_name = 'posts' 
 	#context variable name that will be used to contain 
 	#the list of data that this view is manipulating
 
 	ordering = ['-date_posted']
+	paginate_by = 5
+
+	def get_queryset(self):
+		user = get_object_or_404(User, username=self.kwargs.get('username'))
+		return Post.objects.filter(author=user).order_by('-date_posted')
+
+
+
 
 
 class PostDetailView(DetailView):
